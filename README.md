@@ -1,2 +1,2 @@
 # Weather-App
-Displays weather forecast informatin
+Displays weather forecast information
