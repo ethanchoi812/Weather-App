@@ -1,4 +1,6 @@
-const display = document.getElementById("display");
+const displayMain = document.getElementById("main");
+const displayTemp = document.getElementById("temp");
+const toggleTempButton = document.getElementById("toggle-temp");
 
 const getDateToday = () => {
 
@@ -16,45 +18,49 @@ const getDateToday = () => {
 }
 
 const calculateCelcius = (tempKelvin) => {
-    return tempKelvin - 273.15.toFixed(2);
+    return (tempKelvin - 273.15).toFixed(2);
 }
 
 const calculateFahrenheit = (tempKelvin) => {
     return ((tempKelvin - 273.15) * 1.80 + 32.00).toFixed(2);
 }
 
+
 // Current weather
 async function getCurrentWeather(text = "singapore") {
 
+    let tempKelvin;
+
     try {
-        const apiKey = 'b74658a407abe996e2f7828c0e040e38';
+        const apiKey = '';
         const url = `http://api.openweathermap.org/data/2.5/weather?q=${text}&appid=${apiKey}`;
         const response = await fetch(url, { mode: 'cors' });
         const jsonData = await response.json();
         console.log(jsonData);
 
-        const tempKelvin = jsonData.main.temp;
-        const tempCelcius = calculateCelcius(tempKelvin);
-        const tempFahrenheit = calculateFahrenheit(tempKelvin);
-
+        tempKelvin = jsonData.main.temp;
+        
         const info = jsonData.weather;
-
-        display.innerHTML = `<p>${tempFahrenheit}</p>`;
-
         info.forEach(weather => {
-            display.innerHTML += `<p>${weather.main}</p>`;
+            displayMain.innerHTML += `<p>${weather.main}</p>`;
         });
+
     } catch(error) {
         console.log(error['message']);
         display.innerHTML += 'Current weather data is not available. Please try again later.';
     }
+
+    const tempCelcius = calculateCelcius(tempKelvin);
+    const tempFahrenheit = calculateFahrenheit(tempKelvin);
+
+    displayTemp.innerHTML = `<p>${tempCelcius}</p>`;
 }
 
 // 7-day forecast
 async function getWeatherForecast(text = "singapore") {
 
     try {
-        const apiKey = 'b74658a407abe996e2f7828c0e040e38';
+        const apiKey = '';
         const url = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${text}&appid=${apiKey}`;
         const response = await fetch(url, { mode: 'cors' });
         const jsonData = await response.json();
