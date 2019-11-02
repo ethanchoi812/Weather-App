@@ -1,21 +1,9 @@
-const displayMain = document.getElementById("main");
-const displayTemp = document.getElementById("temp");
-const toggleTempButton = document.getElementById("toggle-temp");
-
-const getDateToday = () => {
-
-    let dateObj = new Date();
-    let year = dateObj.getFullYear();
-    let monthIdx = dateObj.getMonth();
-    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    let day = dateObj.getDate();
-
-    const dateDiv = document.createElement('div');
-    dateDiv.setAttribute('id', 'dateDiv');
-    dateDiv.innerHTML += `${day} ${months[monthIdx]} ${year}`;
-
-    return dateDiv;
-}
+const displayCurrentMain = document.getElementById("current-main");
+const displayForecastMain = document.getElementById("forecast-main");
+const displayTempC = document.getElementById("tempC");
+const displayTempF = document.getElementById("tempF");
+const showCelcius = document.getElementById("celcius");
+const showFahrenheit = document.getElementById("fahrenheit");
 
 const calculateCelcius = (tempKelvin) => {
     return (tempKelvin - 273.15).toFixed(2);
@@ -40,23 +28,24 @@ async function getCurrentWeather(text = "singapore") {
 
         tempKelvin = jsonData.main.temp;
         
+        const tempCelcius = calculateCelcius(tempKelvin);
+        const tempFahrenheit = calculateFahrenheit(tempKelvin);
+
+        displayTempC.innerHTML = `${tempCelcius}`;
+        displayTempF.innerHTML = `${tempFahrenheit}`;
+
         const info = jsonData.weather;
         info.forEach(weather => {
-            displayMain.innerHTML += `<p>${weather.main}</p>`;
+            displayCurrentMain.innerHTML += `<p>${weather.main}</p>`;
         });
 
     } catch(error) {
         console.log(error['message']);
-        display.innerHTML += 'Current weather data is not available. Please try again later.';
+        displayMain.innerHTML += '<p>Current weather data is not available. Please try again later.</p>';
     }
-
-    const tempCelcius = calculateCelcius(tempKelvin);
-    const tempFahrenheit = calculateFahrenheit(tempKelvin);
-
-    displayTemp.innerHTML = `<p>${tempCelcius}</p>`;
 }
 
-// 7-day forecast
+// // 7-day forecast
 async function getWeatherForecast(text = "singapore") {
 
     try {
@@ -69,13 +58,39 @@ async function getWeatherForecast(text = "singapore") {
         const infoList = jsonData.list
 
         infoList.forEach(info => {
-            display.innerHTML += `<p>${info.weather[0].main}</p>`;
+            displayForecastMain.innerHTML += `<p>${info.weather[0].main}</p>`;
         });
     } catch(error){
         console.log(error['message']);
-        display.innerHTML += 'Weather forecast data is not available. Please try again later.'
+        displayForecastMain.innerHTML += '<p>Weather forecast data is not available. Please try again later.</p>'
     }
 }
 
+const getDateToday = () => {
+
+    let dateObj = new Date();
+    let year = dateObj.getFullYear();
+    let monthIdx = dateObj.getMonth();
+    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    let day = dateObj.getDate();
+
+    const dateDiv = document.createElement('div');
+    dateDiv.setAttribute('id', 'dateDiv');
+    dateDiv.innerHTML += `${day} ${months[monthIdx]} ${year}`;
+
+    return dateDiv;
+}
+
+
 getCurrentWeather("new york");
 getWeatherForecast("new york");
+
+showCelcius.addEventListener('click', () => {
+    displayTempC.style.display = "inline-block";
+    displayTempF.style.display = "none";
+});
+
+showFahrenheit.addEventListener('click', () => {
+    displayTempF.style.display = "inline-block";
+    displayTempC.style.display = "none";
+});
