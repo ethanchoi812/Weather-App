@@ -24,7 +24,7 @@ async function getCurrentWeather(text = "singapore") {
     let tempKelvin;
 
     try {
-        const apiKey = '5d72b17a95b26ed1171ae4ed1208a463';
+        const apiKey = '';
         const url = `http://api.openweathermap.org/data/2.5/weather?q=${text}&appid=${apiKey}`;
         const response = await fetch(url, { mode: 'cors' });
         const jsonData = await response.json();
@@ -55,7 +55,7 @@ async function getCurrentWeather(text = "singapore") {
 async function getWeatherForecast(text = "singapore") {
 
     try {
-        const apiKey = '5d72b17a95b26ed1171ae4ed1208a463';
+        const apiKey = '';
         const url = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${text}&appid=${apiKey}`;
         const response = await fetch(url, { mode: 'cors' });
         const jsonData = await response.json();
