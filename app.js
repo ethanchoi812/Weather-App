@@ -1,13 +1,13 @@
-const displayCurrentMain = document.getElementById("current-main");
-const displayForecastMain = document.getElementById("forecast-main");
+const displayDiv = document.getElementById("display");
+const toggleTempDiv = document.getElementById("toggle-temp");
 
-let tempSymbol = 'C';
+const displayCurrentMain = document.createElement("div");
+displayCurrentMain.classList.add("current-main");
 
-const displayTempC = document.getElementById("tempC");
-const displayTempF = document.getElementById("tempF");
 
-const showCelcius = document.getElementById("celcius");
-const showFahrenheit = document.getElementById("fahrenheit");
+const displayForecastMain = document.createElement("div");
+displayForecastMain.classList.add("forecast-main");
+
 
 const calculateCelcius = (tempKelvin) => {
     return (tempKelvin - 273.15).toFixed(2);
@@ -17,14 +17,12 @@ const calculateFahrenheit = (tempKelvin) => {
     return ((tempKelvin - 273.15) * 1.80 + 32.00).toFixed(2);
 }
 
-
 // Current weather
-async function getCurrentWeather(text = "singapore") {
+const getCurrentWeather = async (text = "singapore") => {
 
     let tempKelvin;
 
     try {
-        const apiKey = '';
         const url = `http://api.openweathermap.org/data/2.5/weather?q=${text}&appid=${apiKey}`;
         const response = await fetch(url, { mode: 'cors' });
         const jsonData = await response.json();
@@ -35,27 +33,30 @@ async function getCurrentWeather(text = "singapore") {
         const tempCelcius = calculateCelcius(tempKelvin);
         const tempFahrenheit = calculateFahrenheit(tempKelvin);
 
-        displayTempC.innerHTML = `${tempCelcius} &deg;C`;
-        displayTempF.innerHTML = `${tempFahrenheit} &deg;F`;
-
-        const dateSpan = getDateToday();
+        let tempC = `${tempCelcius} &deg;C`;
+        let tempF = `${tempFahrenheit} &deg;F`;
         
         const info = jsonData.weather;
         info.forEach(weather => {
-            displayCurrentMain.innerHTML += dateSpan.outerHTML + `<p>Today's weather: ${weather.main}</p>`;
+            displayCurrentMain.innerHTML += `<p>Today's weather: ${weather.main}, ` +
+                `<span class=tempC>${tempC}</span><span class=tempF style="display:none">${tempF}</span>` +
+            `</p>`;
+
         });
+
+        toggleTempSym();
 
     } catch(error) {
         console.log(error['message']);
         displayCurrentMain.innerHTML += '<p>Current weather data is not available. Please try again later.</p>';
     }
+
 }
 
-// // 7-day forecast
-async function getWeatherForecast(text = "singapore") {
+// 7-day forecast
+const  getWeatherForecast = async (text = "singapore") => {
 
     try {
-        const apiKey = '';
         const url = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${text}&appid=${apiKey}`;
         const response = await fetch(url, { mode: 'cors' });
         const jsonData = await response.json();
@@ -68,35 +69,28 @@ async function getWeatherForecast(text = "singapore") {
             const dayTempKelvin = info.temp.day;
             const nightTempKelvin = info.temp.night;
             
-            const dayTemp = () => {
-                // if celcius
-                if (tempSymbol === 'C') {
-                    return `${calculateCelcius(dayTempKelvin)} &deg;C`;
+            const dayTempC = `${calculateCelcius(dayTempKelvin)} &deg;C`;
+            const dayTempF = `${calculateFahrenheit(dayTempKelvin)} &deg;F`;
 
-                // if fahrenheit
-                } else if (tempSymbol === 'F') {
-                    return `${calculateFahrenheit(dayTempKelvin)} &deg;F`;
-                }
-
-            }
-
-            const nightTemp = () => {
-                // if celcius
-                if (tempSymbol === 'C') {
-                    return `${calculateCelcius(nightTempKelvin)} &deg;C`;
-                
-                // if fahrenheit
-                } else if (tempSymbol === 'F') {
-                    return `${calculateFahrenheit(nightTempKelvin)} &deg;F`;
-                }
-            }
+            const nightTempC = `${calculateCelcius(nightTempKelvin)} &deg;C`;
+            const nightTempF = `${calculateFahrenheit(nightTempKelvin)} &deg;F`;
+              
             
-            displayForecastMain.innerHTML += `<p>${info.weather[0].main}, Day Temp: ${dayTemp()} Night Temp: ${nightTemp()}</p>`;
+            displayForecastMain.innerHTML += 
+            `<p>${info.weather[0].main}, ` +
+            `Day Temp: <span class="tempC">${dayTempC}&nbsp;</span><span class="tempF" style="display:none">${dayTempF}&nbsp;</span>` + 
+            `Night Temp: <span class="tempC">${nightTempC}</span><span class="tempF" style="display:none">${nightTempF}</span>` +
+            `</p>`;
+
         });
+
+    toggleTempSym();
+
     } catch(error){
         console.log(error['message']);
         displayForecastMain.innerHTML += '<p>Weather forecast data is not available. Please try again later.</p>'
     }
+
 }
 
 const getDateToday = () => {
@@ -114,20 +108,37 @@ const getDateToday = () => {
     return dateSpan;
 }
 
+const showCelcius = document.createElement('button');
+showCelcius.setAttribute("id", "celcius");
+showCelcius.innerHTML = "C";
 
-getCurrentWeather("new york");
-getWeatherForecast("new york");
 
-showCelcius.addEventListener('click', () => {
-    tempSymbol = 'C';
+const showFahrenheit = document.createElement("button");
+showFahrenheit.setAttribute("id", "fahrenheit");
+showFahrenheit.innerHTML = "F";
 
-    displayTempC.style.display = "inline-block";
-    displayTempF.style.display = "none";
-});
+const toggleTempSym = () => {
 
-showFahrenheit.addEventListener('click', () => {
-    tempSymbol = 'F';
+        const displayTempC = document.querySelectorAll(".tempC");
+        const displayTempF = document.querySelectorAll(".tempF");
 
-    displayTempF.style.display = "inline-block";
-    displayTempC.style.display = "none";
-});
+        showCelcius.addEventListener('click', () => {
+            displayTempC.forEach((ele) => { ele.style.display = "inline-block" });
+            displayTempF.forEach((ele) => { ele.style.display = "none" });
+        });
+
+        showFahrenheit.addEventListener('click', () => {
+
+            displayTempF.forEach((ele) => { ele.style.display = "inline-block" });
+            displayTempC.forEach((ele) => { ele.style.display = "none" });
+        });
+}
+
+
+getCurrentWeather();
+getWeatherForecast();
+
+displayDiv.appendChild(displayCurrentMain);
+displayDiv.appendChild(displayForecastMain);
+toggleTempDiv.appendChild(showCelcius);
+toggleTempDiv.appendChild(showFahrenheit);
