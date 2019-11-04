@@ -35,11 +35,14 @@ const getCurrentWeather = async (text = "singapore") => {
 
         let tempC = `${tempCelcius} &deg;C`;
         let tempF = `${tempFahrenheit} &deg;F`;
+
+        const dateElement = getWeatherDate(0);
         
         const info = jsonData.weather;
         info.forEach(weather => {
-            displayCurrentMain.innerHTML += `<p>Today's weather: ${weather.main}, ` +
-                `<span class=tempC>${tempC}</span><span class=tempF style="display:none">${tempF}</span>` +
+            displayCurrentMain.innerHTML += `${dateElement}` +
+            `<p>Today's weather: ${weather.main}, ` +
+            `<span class=tempC>${tempC}</span><span class=tempF style="display:none">${tempF}</span>` +
             `</p>`;
 
         });
@@ -64,7 +67,7 @@ const  getWeatherForecast = async (text = "singapore") => {
 
         const infoList = jsonData.list
 
-        infoList.forEach(info => {
+        infoList.forEach((info, i) => {
 
             const dayTempKelvin = info.temp.day;
             const nightTempKelvin = info.temp.night;
@@ -75,12 +78,14 @@ const  getWeatherForecast = async (text = "singapore") => {
             const nightTempC = `${calculateCelcius(nightTempKelvin)} &deg;C`;
             const nightTempF = `${calculateFahrenheit(nightTempKelvin)} &deg;F`;
               
+            let date = getWeatherDate(i);
             
-            displayForecastMain.innerHTML += 
-            `<p>${info.weather[0].main}, ` +
-            `Day Temp: <span class="tempC">${dayTempC}&nbsp;</span><span class="tempF" style="display:none">${dayTempF}&nbsp;</span>` + 
-            `Night Temp: <span class="tempC">${nightTempC}</span><span class="tempF" style="display:none">${nightTempF}</span>` +
-            `</p>`;
+            displayForecastMain.innerHTML += `<table><tr>`+
+            `<td>${date}</td>` + 
+            `<td>${info.weather[0].main}</td>` +
+            `<td>Day Temp: <span class="tempC">${dayTempC}&nbsp;</span><span class="tempF" style="display:none">${dayTempF}&nbsp;</span></td>` + 
+            `<td>Night Temp: <span class="tempC">${nightTempC}</span><span class="tempF" style="display:none">${nightTempF}</span></td>` +
+            `</tr></table>`;
 
         });
 
@@ -93,19 +98,19 @@ const  getWeatherForecast = async (text = "singapore") => {
 
 }
 
-const getDateToday = () => {
+const getWeatherDate = (i) => {
 
-    let dateObj = new Date();
-    let year = dateObj.getFullYear();
+    let d = new Date();
+    let dateObj = new Date(d.setDate(d.getDate() + i));
+    console.log(dateObj);
     let monthIdx = dateObj.getMonth();
     let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    let day = dateObj.getDate();
+    
+    this.year = dateObj.getFullYear();
+    this.month = months[monthIdx]
+    this.day = dateObj.getDate();
 
-    const dateSpan = document.createElement('span');
-    dateSpan.setAttribute('id', 'dateDiv');
-    dateSpan.innerHTML += `${day} ${months[monthIdx]} ${year}`;
-
-    return dateSpan;
+    return `${day} ${month} ${year}`;
 }
 
 const showCelcius = document.createElement('button');
