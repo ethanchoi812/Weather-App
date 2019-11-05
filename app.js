@@ -1,3 +1,7 @@
+const searchField = document.getElementById("search-field");
+const searchForm = document.getElementById("search-form");
+
+
 const displayDiv = document.getElementById("display");
 const toggleTempDiv = document.getElementById("toggle-temp");
 
@@ -18,12 +22,13 @@ const calculateFahrenheit = (tempKelvin) => {
 }
 
 // Current weather
-const getCurrentWeather = async (text = "singapore") => {
+const getCurrentWeather = async (city = "Singapore") => {
 
     let tempKelvin;
 
     try {
-        const url = `http://api.openweathermap.org/data/2.5/weather?q=${text}&appid=${apiKey}`;
+
+        const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
         const response = await fetch(url, { mode: 'cors' });
         const jsonData = await response.json();
         console.log(jsonData);
@@ -38,34 +43,38 @@ const getCurrentWeather = async (text = "singapore") => {
 
         const dateElement = getWeatherDate(0);
         
+        let cityName = city.split(" ").map((str) =>
+            str.charAt(0).toUpperCase() + str.slice(1)
+        ).join(" ");
+
         const info = jsonData.weather;
         info.forEach(weather => {
-            displayCurrentMain.innerHTML += `${dateElement}` +
-            `<p>Today's weather: ${weather.main}, ` +
+            displayCurrentMain.innerHTML = `${dateElement}` +
+            `<p>Today's weather for ${cityName}: ${weather.main}, ` +
             `<span class=tempC>${tempC}</span><span class=tempF style="display:none">${tempF}</span>` +
             `</p>`;
-
         });
 
         toggleTempSym();
 
     } catch(error) {
         console.log(error['message']);
-        displayCurrentMain.innerHTML += '<p>Current weather data is not available. Please try again later.</p>';
+        displayCurrentMain.innerHTML = '<p>Current weather data is not available. Please try again later.</p>';
     }
 
 }
 
 // 7-day forecast
-const  getWeatherForecast = async (text = "singapore") => {
+const getWeatherForecast = async (city = "singapore") => {
 
     try {
-        const url = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${text}&appid=${apiKey}`;
+        const url = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&appid=${apiKey}`;
         const response = await fetch(url, { mode: 'cors' });
         const jsonData = await response.json();
         console.log(jsonData);
 
         const infoList = jsonData.list
+        const forecastDiv = document.createElement("div");
 
         infoList.forEach((info, i) => {
 
@@ -80,7 +89,7 @@ const  getWeatherForecast = async (text = "singapore") => {
               
             let date = getWeatherDate(i);
             
-            displayForecastMain.innerHTML += `<table><tr>`+
+            forecastDiv.innerHTML += `<table><tr>`+
             `<td>${date}</td>` + 
             `<td>${info.weather[0].main}</td>` +
             `<td>Day Temp: <span class="tempC">${dayTempC}&nbsp;</span><span class="tempF" style="display:none">${dayTempF}&nbsp;</span></td>` + 
@@ -89,11 +98,12 @@ const  getWeatherForecast = async (text = "singapore") => {
 
         });
 
+    displayForecastMain.innerHTML = forecastDiv.outerHTML;
     toggleTempSym();
 
     } catch(error){
         console.log(error['message']);
-        displayForecastMain.innerHTML += '<p>Weather forecast data is not available. Please try again later.</p>'
+        displayForecastMain.innerHTML = '<p>Weather forecast data is not available. Please try again later.</p>'
     }
 
 }
@@ -102,7 +112,6 @@ const getWeatherDate = (i) => {
 
     let d = new Date();
     let dateObj = new Date(d.setDate(d.getDate() + i));
-    console.log(dateObj);
     let monthIdx = dateObj.getMonth();
     let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     
@@ -139,6 +148,12 @@ const toggleTempSym = () => {
         });
 }
 
+searchForm.addEventListener("submit", (event)=> {
+    event.preventDefault();
+    let city = searchField.value
+    getCurrentWeather(city);
+    getWeatherForecast(city);
+});
 
 getCurrentWeather();
 getWeatherForecast();

@@ -2,6 +2,40 @@ body {
     font-family: 'Raleway', sans-serif;
 }
 
+#search-form input[type="text"] {
+    display: inline-block;
+    font-size: 16px;
+    padding: 10px 15px;
+    width: 30%;
+}
+
+#display {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 25px;
+}
+
+.current-main {
+    font-size: 26px;
+}
+
+
+table {
+    margin: 0 auto;
+}
+
 td {
     padding: 10px 15px;
+}
+
+#toggle-temp {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+#search-form input[type="submit"], button {
+    display: inline-block;
+    font-size: 16px;
+    padding: 10px;
 }
