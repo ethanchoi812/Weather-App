@@ -68,7 +68,7 @@ const getCurrentWeather = async (city = "Singapore") => {
 const getWeatherForecast = async (city = "singapore") => {
 
     try {
-        const url = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&appid=${apiKey}`;
+        const url = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&appid=${apiKey}&cnt=8`;
         const response = await fetch(url, { mode: 'cors' });
         const jsonData = await response.json();
         console.log(jsonData);
@@ -77,25 +77,25 @@ const getWeatherForecast = async (city = "singapore") => {
         const forecastDiv = document.createElement("div");
 
         infoList.forEach((info, i) => {
+            if (i !== 0) {
+                const dayTempKelvin = info.temp.day;
+                const nightTempKelvin = info.temp.night;
+                
+                const dayTempC = `${calculateCelcius(dayTempKelvin)} &deg;C`;
+                const dayTempF = `${calculateFahrenheit(dayTempKelvin)} &deg;F`;
 
-            const dayTempKelvin = info.temp.day;
-            const nightTempKelvin = info.temp.night;
-            
-            const dayTempC = `${calculateCelcius(dayTempKelvin)} &deg;C`;
-            const dayTempF = `${calculateFahrenheit(dayTempKelvin)} &deg;F`;
-
-            const nightTempC = `${calculateCelcius(nightTempKelvin)} &deg;C`;
-            const nightTempF = `${calculateFahrenheit(nightTempKelvin)} &deg;F`;
-              
-            let date = getWeatherDate(i);
-            
-            forecastDiv.innerHTML += `<table><tr>`+
-            `<td>${date}</td>` + 
-            `<td>${info.weather[0].main}</td>` +
-            `<td>Day Temp: <span class="tempC">${dayTempC}&nbsp;</span><span class="tempF" style="display:none">${dayTempF}&nbsp;</span></td>` + 
-            `<td>Night Temp: <span class="tempC">${nightTempC}</span><span class="tempF" style="display:none">${nightTempF}</span></td>` +
-            `</tr></table>`;
-
+                const nightTempC = `${calculateCelcius(nightTempKelvin)} &deg;C`;
+                const nightTempF = `${calculateFahrenheit(nightTempKelvin)} &deg;F`;
+                
+                let date = getWeatherDate(i);
+                
+                forecastDiv.innerHTML += `<table><tr>`+
+                `<td>${date}</td>` + 
+                `<td>${info.weather[0].main}</td>` +
+                `<td>Day Temp: <span class="tempC">${dayTempC}&nbsp;</span><span class="tempF" style="display:none">${dayTempF}&nbsp;</span></td>` + 
+                `<td>Night Temp: <span class="tempC">${nightTempC}</span><span class="tempF" style="display:none">${nightTempF}</span></td>` +
+                `</tr></table>`;
+            }
         });
 
     displayForecastMain.innerHTML = forecastDiv.outerHTML;
