@@ -47,18 +47,20 @@ const getCurrentWeather = async (city = "Singapore") => {
             str.charAt(0).toUpperCase() + str.slice(1)
         ).join(" ");
 
-        const info = jsonData.weather;
-        info.forEach(weather => {
-            displayCurrentMain.innerHTML = `${dateElement}` +
-            `<p>Today's weather for ${cityName}: ${weather.main}, ` +
+        const info = jsonData.weather[0];
+        displayCurrentMain.innerHTML = `${dateElement}` +
+            `<p>Today's weather for ${cityName}: ${info.main}, ` +
             `<span class=tempC>${tempC}</span><span class=tempF style="display:none">${tempF}</span>` +
             `</p>`;
-        });
 
         toggleTempSym();
 
+        let backgroundURL = `https://source.unsplash.com/1600x900/?weather,${info.main}`;
+        let body = document.getElementsByTagName('body')[0];
+        body.style.backgroundImage = `url(${backgroundURL})`
+
     } catch(error) {
-        console.log(error['message']);
+        console.log(error);
         displayCurrentMain.innerHTML = '<p>Current weather data is not available. Please try again later.</p>';
     }
 
@@ -75,6 +77,8 @@ const getWeatherForecast = async (city = "singapore") => {
 
         const infoList = jsonData.list
         const forecastDiv = document.createElement("div");
+        let forecastContent = document.createElement("table");
+        forecastContent = "" 
 
         infoList.forEach((info, i) => {
             if (i !== 0) {
@@ -89,14 +93,17 @@ const getWeatherForecast = async (city = "singapore") => {
                 
                 let date = getWeatherDate(i);
                 
-                forecastDiv.innerHTML += `<table><tr>`+
+                forecastContent += `<tr>` +
                 `<td>${date}</td>` + 
                 `<td>${info.weather[0].main}</td>` +
-                `<td>Day Temp: <span class="tempC">${dayTempC}&nbsp;</span><span class="tempF" style="display:none">${dayTempF}&nbsp;</span></td>` + 
-                `<td>Night Temp: <span class="tempC">${nightTempC}</span><span class="tempF" style="display:none">${nightTempF}</span></td>` +
-                `</tr></table>`;
+                `<td><span class="tempC">${dayTempC}</span><span class="tempF" style="display:none">${dayTempF}&nbsp;</span></td>` + 
+                `<td><span class="tempC">${nightTempC}</span><span class="tempF" style="display:none">${nightTempF}</span></td>` +
+                `</tr>`;
             }
         });
+
+
+    forecastDiv.innerHTML += `<table><tr><td>Date</td><td>Weather</td><td>Day Temp</td><td>Night Temp</td></tr>${forecastContent}</table>`;
 
     displayForecastMain.innerHTML = forecastDiv.outerHTML;
     toggleTempSym();
