@@ -150,7 +150,7 @@ const toggleTempSym = () => {
 
 searchForm.addEventListener("submit", (event)=> {
     event.preventDefault();
-    let city = searchField.value
+    let city = searchField.value || "singapore"
     getCurrentWeather(city);
     getWeatherForecast(city);
 });
