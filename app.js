@@ -12,6 +12,7 @@ displayCurrentMain.classList.add("current-main");
 const displayForecastMain = document.createElement("div");
 displayForecastMain.classList.add("forecast-main");
 
+let defaultCountry = "";
 
 const calculateCelcius = (tempKelvin) => {
     return (tempKelvin - 273.15).toFixed(2);
@@ -162,8 +163,24 @@ searchForm.addEventListener("submit", (event)=> {
     getWeatherForecast(city);
 });
 
-getCurrentWeather();
-getWeatherForecast();
+const startWeatherApp = async () => {
+
+    try {
+        const url = 'http://ip-api.com/json';
+        const response = await fetch(url, { mode: 'cors' });
+        const jsonData = await response.json();
+
+        defaultCountry = jsonData.country
+
+        getCurrentWeather(defaultCountry);
+        getWeatherForecast(defaultCountry);
+
+    } catch (error) {
+        console.log(error['message']);
+    }
+}
+
+startWeatherApp();
 
 displayDiv.appendChild(displayCurrentMain);
 displayDiv.appendChild(displayForecastMain);
