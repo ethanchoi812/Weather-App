@@ -22,10 +22,18 @@ const calculateFahrenheit = (tempKelvin) => {
     return ((tempKelvin - 273.15) * 1.80 + 32.00).toFixed(2);
 }
 
+const capitalize = (str) => {
+    return str.split(" ").map((substr) =>
+        substr.charAt(0).toUpperCase() + substr.slice(1)
+    ).join(" ");
+
+}
+
 // Current weather
 const getCurrentWeather = async (city = "Singapore") => {
 
     let tempKelvin;
+    let errorMsg;
 
     try {
 
@@ -34,35 +42,39 @@ const getCurrentWeather = async (city = "Singapore") => {
         const jsonData = await response.json();
         console.log(jsonData);
 
-        tempKelvin = jsonData.main.temp;
-        
-        const tempCelcius = calculateCelcius(tempKelvin);
-        const tempFahrenheit = calculateFahrenheit(tempKelvin);
+        //if (jsonData.cod === 200) {
+            
+            tempKelvin = jsonData.main.temp;
+            
+            const tempCelcius = calculateCelcius(tempKelvin);
+            const tempFahrenheit = calculateFahrenheit(tempKelvin);
 
-        let tempC = `${tempCelcius} &deg;C`;
-        let tempF = `${tempFahrenheit} &deg;F`;
+            let tempC = `${tempCelcius} &deg;C`;
+            let tempF = `${tempFahrenheit} &deg;F`;
 
-        const dateElement = getWeatherDate(0);
-        
-        let cityName = city.split(" ").map((str) =>
-            str.charAt(0).toUpperCase() + str.slice(1)
-        ).join(" ");
+            const dateElement = getWeatherDate(0);
+            
+            let cityName = capitalize(city);
 
-        const info = jsonData.weather[0];
-        displayCurrentMain.innerHTML = `${dateElement}` +
-            `<p>Today's weather for ${cityName}: ${info.main}, ` +
-            `<span class=tempC>${tempC}</span><span class=tempF style="display:none">${tempF}</span>` +
-            `</p>`;
+            const info = jsonData.weather[0];
+            displayCurrentMain.innerHTML = `${dateElement}` +
+                `<p>Today's weather for ${cityName}: ${info.main}, ` +
+                `<span class=tempC>${tempC}</span><span class=tempF style="display:none">${tempF}</span>` +
+                `</p>`;
 
-        toggleTempSym();
+            toggleTempSym();
 
-        let backgroundURL = `https://source.unsplash.com/1600x900/?weather,${info.main}`;
-        let body = document.getElementsByTagName('body')[0];
-        body.style.backgroundImage = `url(${backgroundURL})`
+            let backgroundURL = `https://source.unsplash.com/1600x900/?weather,${info.main}`;
+            let body = document.getElementsByTagName('body')[0];
+            body.style.backgroundImage = `url(${backgroundURL})`;
+
+        //} else if(jsonData.cod === "404") {
+        //    errorMsg = capitalize(jsonData.message);
+        //}
 
     } catch(error) {
         console.log(error);
-        displayCurrentMain.innerHTML = '<p>Current weather data is not available. Please try again later.</p>';
+        displayCurrentMain.innerHTML = `<p>Current weather data is not available. Please try again later.</p>`;
     }
 
 }
@@ -120,14 +132,18 @@ const getWeatherDate = (i) => {
 
     let d = new Date();
     let dateObj = new Date(d.setDate(d.getDate() + i));
-    let monthIdx = dateObj.getMonth();
-    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    
-    this.year = dateObj.getFullYear();
-    this.month = months[monthIdx]
-    this.day = dateObj.getDate();
 
-    return `${day} ${month} ${year}`;
+    let monthIdx = dateObj.getMonth();
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    this.month = months[monthIdx];
+    
+    this.date = dateObj.getDate();
+
+    let dayIdx = dateObj.getDay();
+    let daysOfWeek = ["Mon", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun"];
+    this.day = daysOfWeek[dayIdx];
+
+    return `${day}, ${date} ${month}`;
 }
 
 const showCelcius = document.createElement('button');
