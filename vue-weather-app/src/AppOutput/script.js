@@ -7,14 +7,17 @@ export default {
     data() {
         return {
             cityName: null,
-            weatherData: {}
+            weatherData: {},
+            scale: 'c'
         }
     },
     created() {
         bus.$on('city-name', this.onCityNameChange)
+        bus.$on('toggle-scale', this.onToggleScale)
     },
     destroyed() {
         bus.$off('city-name', this.onCityNameChange)
+        bus.$off('toggle-scale', this.onToggleScale)
     },
     methods: {
         onCityNameChange(city) {
@@ -38,6 +41,18 @@ export default {
             Vue.set(this.weatherData, this.cityName, data)
             console.log(data);
             })
+        },
+
+        onToggleScale(sym){
+            this.scale = sym
+        },
+
+        toCelcius(tempKelvin){
+            return (tempKelvin - 273.15).toFixed(2);
+        },
+        
+        toFahrenheit(tempKelvin){
+            return ((tempKelvin - 273.15) * 1.80 + 32.00).toFixed(2);
         }
     },
 }

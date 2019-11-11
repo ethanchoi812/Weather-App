@@ -6,7 +6,14 @@
     <p v-else>
       Today's weather for {{ cityName }}
       <div v-if="weatherData[cityName]">
-          <p>{{ weatherData[cityName].weather[0].main }}</p>
+          <p>{{ weatherData[cityName].weather[0].main }},
+            <span v-if="scale === 'c'">
+              {{ toCelcius(weatherData[cityName].main.temp) }} &degC;
+            </span>
+            <span v-if="scale === 'f'">
+              {{ toFahrenheit(weatherData[cityName].main.temp) }} &degF;
+            </span>
+          </p>
       </div>
     </p>
   </div>
