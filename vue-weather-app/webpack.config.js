@@ -1,6 +1,7 @@
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebPackPlugin = require("html-webpack-plugin")
 
+
 module.exports = {
     module: {
         rules: [
@@ -17,6 +18,13 @@ module.exports = {
                         presets: ['@babel/preset-env']
                     }
                 }
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader'
+                ]
             }
         ]
     },
@@ -24,6 +32,6 @@ module.exports = {
         new VueLoaderPlugin(),
         new HtmlWebPackPlugin({
             template: "./src/index.html"
-        })
+        }),
     ]
 }
