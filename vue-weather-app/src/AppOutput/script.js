@@ -39,8 +39,8 @@ export default {
             .then(r => r.json())
             .then(data => {
             Vue.set(this.weatherData, this.cityName, data)
-            console.log(data);
             })
+            bus.$emit('background-change', this.weatherData)
         },
 
         onToggleScale(sym){
