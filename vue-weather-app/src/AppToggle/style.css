@@ -11,10 +11,6 @@ button {
     padding: 10px 15px;
 }
 
-button:hover {
-    background: #fff000;
-}
-
 .active {
     background: #39ff74;
 }

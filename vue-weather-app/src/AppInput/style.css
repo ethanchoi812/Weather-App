@@ -6,13 +6,18 @@ input[type="text"] {
     display: inline-block;
     font-size: 16px;
     padding: 8px 12px;
+    margin-top: 50px;
     width: 30%;
 }
 
 button {
-    background: #fff;
+    background: #39ff74;
+    border: none;
     display: inline-block;
-    border: 1px solid #ccc;
     font-size: 16px;
     padding: 10px;
+}
+
+button:hover {
+    background: #00ff7b;
 }

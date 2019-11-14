@@ -8,7 +8,7 @@ export default {
         return {
             cityName: null,
             weatherData: {},
-            scale: 'c'
+            scale: 'c',
         }
     },
     created() {
