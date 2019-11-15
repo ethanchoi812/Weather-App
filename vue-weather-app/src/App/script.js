@@ -28,5 +28,4 @@ export default {
             this.backgroundURL = `url(${url + weather.main}`
         }
     }
-
 }

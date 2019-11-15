@@ -43,6 +43,16 @@ export default {
             bus.$emit('background-change', this.weatherData)
         },
 
+        fetchDefaultCountry(){
+            const url = 'http://ip-api.com/json'
+            fetch(url)
+            .then(r => r.json())
+            .then(data => {
+                let city = data.country
+                this.onCityNameChange(city)
+            })
+        },
+
         onToggleScale(sym){
             this.scale = sym
         },
@@ -55,4 +65,7 @@ export default {
             return ((tempKelvin - 273.15) * 1.80 + 32.00).toFixed(2);
         }
     },
+    beforeMount() {
+        this.fetchDefaultCountry()
+    }
 }
