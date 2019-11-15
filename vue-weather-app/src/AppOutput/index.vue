@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <h3 v-if="cityName == null">
-      Enter a city name above to see their weather data
-    </h3>
-    <div v-if="weatherData[cityName]">
+    <div class="display" v-if="weatherData[cityName]">
       <div v-if="weatherData[cityName].weather">
         <h3>Today's weather for {{ cityName }}</h3>
         <p>{{ weatherData[cityName].weather[0].main }},
@@ -18,7 +14,6 @@
     <div v-else>
         <p>No weather data found for {{ cityName }}. Please try again.</p>
     </div>
-  </div>
   </div>
 </template>
 <script src="./script.js"></script>

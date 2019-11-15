@@ -2,6 +2,13 @@
     text-align: center;
 }
 
+.display {
+    background: rgba(255,255,255, 0.4);
+    padding: 10px 15px;
+    margin-top: 25px;
+    height: 20%;
+}
+
 h3 {
     font-size: 16px;
 }
