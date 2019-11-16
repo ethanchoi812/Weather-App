@@ -1,6 +1,5 @@
 <template>
 <div v-bind:style="{background:backgroundURL}">
-  <p>Weather App 2.0</p>
   <app-input></app-input>
   <app-output></app-output>
   <app-toggle></app-toggle>
