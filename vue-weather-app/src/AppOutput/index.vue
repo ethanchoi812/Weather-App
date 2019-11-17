@@ -4,10 +4,10 @@
         <h3>Today's weather for {{ cityName }}</h3>
         <p>{{ weatherData[cityName].weather[0].main }},
         <span v-if="scale === 'c'">
-          {{ toCelcius(weatherData[cityName].main.temp) }} &degC;
+          {{ toCelcius(weatherData[cityName].main.temp) }} &degC
         </span>
         <span v-if="scale === 'f'">
-          {{ toFahrenheit(weatherData[cityName].main.temp) }} &degF;
+          {{ toFahrenheit(weatherData[cityName].main.temp) }} &degF
         </span>
         </p>
     </div>    
