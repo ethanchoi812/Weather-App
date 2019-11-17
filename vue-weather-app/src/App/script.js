@@ -13,7 +13,7 @@ export default {
     },
     data() {
         return {
-            backgroundURL:''
+            backgroundURL:'',
         }
     },
     created() {
@@ -24,8 +24,7 @@ export default {
     },
     methods: {
         changeBackground(weather){
-            let url = 'https://source.unsplash.com/1600x900/?weather,'
-            this.backgroundURL = `url(${url + weather.main}`
+            this.backgroundURL = `url(https://source.unsplash.com/1600x900/?weather,${weather})` 
         }
     }
 }

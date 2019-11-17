@@ -1,5 +1,5 @@
 <template>
-<div v-bind:style="{background:backgroundURL}">
+<div v-bind:style="{background: backgroundURL}">
   <app-input></app-input>
   <app-output></app-output>
   <app-toggle></app-toggle>

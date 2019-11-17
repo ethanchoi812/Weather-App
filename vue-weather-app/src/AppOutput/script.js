@@ -39,8 +39,9 @@ export default {
             .then(r => r.json())
             .then(data => {
             Vue.set(this.weatherData, this.cityName, data)
+            bus.$emit('background-change', this.weatherData[this.cityName].weather[0].main)
+            console.log(this.weatherData)
             })
-            bus.$emit('background-change', this.weatherData)
         },
 
         fetchDefaultCountry(){
@@ -63,6 +64,10 @@ export default {
         
         toFahrenheit(tempKelvin){
             return ((tempKelvin - 273.15) * 1.80 + 32.00).toFixed(2);
+        },
+
+        capitalize(str){
+            return (str[0].toUpperCase() + str.slice(1))
         }
     },
     beforeMount() {

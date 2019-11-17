@@ -2,7 +2,7 @@
     <div class="display" v-if="weatherData[cityName]">
       <div v-if="weatherData[cityName].weather">
         <h3>Today's weather for {{ cityName }}</h3>
-        <p>{{ weatherData[cityName].weather[0].main }},
+        <p>{{ capitalize(weatherData[cityName].weather[0].description) }},
         <span v-if="scale === 'c'">
           {{ toCelcius(weatherData[cityName].main.temp) }} &degC
         </span>
