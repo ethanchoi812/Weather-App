@@ -40,7 +40,6 @@ export default {
             .then(data => {
             Vue.set(this.weatherData, this.cityName, data)
             bus.$emit('background-change', this.weatherData[this.cityName].weather[0].main)
-            console.log(this.weatherData)
             })
         },
 

@@ -12,7 +12,7 @@
         </p>
     </div>    
     <div v-else>
-        <p>No weather data found for {{ cityName }}. Please try again.</p>
+        <p>No weather data found for '{{ cityName }}'. Please try again.</p>
     </div>
   </div>
 </template>
