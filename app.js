@@ -140,7 +140,7 @@ const getWeatherDate = (i) => {
     this.date = dateObj.getDate();
 
     let dayIdx = dateObj.getDay();
-    let daysOfWeek = ["Mon", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun"];
+    let daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
     this.day = daysOfWeek[dayIdx];
 
     return `${day}, ${date} ${month}`;
